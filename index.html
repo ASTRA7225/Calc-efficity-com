@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Calc Efficity</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#0d1b2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Efficity" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0d1b2a;
+      --navy2: #1a3a5c;
+      --blue: #1a4a7a;
+      --blue2: #2196F3;
+      --purple: #7c3aed;
+      --red: #e53935;
+      --amber: #f59e0b;
+      --green: #4ade80;
+      --green-bg: #f0fdf4;
+      --green-text: #166534;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #888;
+      --border: #ebebeb;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    /* ── Layout ── */
+    .app {
+      min-height: 100dvh;
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 50%, var(--navy) 100%);
+      padding: 20px 16px 40px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+      color: #fff;
+      animation: fadeDown 0.5s ease both;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 3px;
+    }
+    .header p { font-size: 12px; opacity: 0.5; font-style: italic; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 20px 16px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+      max-width: 480px;
+      margin: 0 auto;
+      animation: fadeUp 0.5s ease both 0.1s;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 18px; }
+    .section-title {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+    }
+    .section-title span { flex: 1; height: 1px; background: var(--border); display: block; }
+    .section-inner {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 0 14px;
+      overflow: hidden;
+    }
+
+    /* ── Input ── */
+    .input-group { padding: 14px 0 8px; }
+    .input-label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      transition: border-color 0.2s;
+      margin-bottom: 12px;
+    }
+    .input-wrap:focus-within { border-color: var(--blue2); }
+    .input-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 14px;
+      font-size: 20px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--navy);
+      background: transparent;
+      width: 100%;
+    }
+    .input-suffix {
+      padding: 0 14px;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: 'DM Mono', monospace;
+      white-space: nowrap;
+    }
+
+    /* ── Toggle ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+    }
+    .toggle-label { font-size: 13px; font-weight: 600; color: var(--text); }
+    .toggle-sub { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
+    .toggle {
+      width: 46px; height: 25px; border-radius: 13px; border: none;
+      cursor: pointer; position: relative; transition: background 0.25s;
+      flex-shrink: 0; background: #ddd;
+    }
+    .toggle.on { background: var(--amber); }
+    .toggle-knob {
+      position: absolute; top: 3px; left: 3px;
+      width: 19px; height: 19px; border-radius: 50%;
+      background: #fff; transition: transform 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle.on .toggle-knob { transform: translateX(21px); }
+
+    /* ── Palier bar ── */
+    .palier-wrap { margin-bottom: 18px; }
+    .palier-label { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+    .palier-track {
+      position: relative; height: 8px;
+      background: #e8e8e8; border-radius: 4px; margin-bottom: 28px;
+    }
+    .palier-fill {
+      position: absolute; left: 0; top: 0; height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--blue2));
+      transition: width 0.4s ease;
+    }
+    .palier-dot {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+    }
+    .palier-dot-inner {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid #fff; background: #ccc;
+      box-shadow: none; transition: background 0.3s, box-shadow 0.3s;
+    }
+    .palier-dot.active .palier-dot-inner {
+      background: var(--blue2);
+      box-shadow: 0 0 0 3px rgba(33,150,243,0.25);
+    }
+    .palier-dot-label {
+      position: absolute; top: 14px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px; font-family: 'DM Mono', monospace;
+      white-space: nowrap; text-align: center; line-height: 1.3;
+      color: #aaa;
+    }
+    .palier-dot.active .palier-dot-label { color: var(--blue); font-weight: 600; }
+
+    /* ── Rows ── */
+    .row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      transition: opacity 0.3s;
+    }
+    .row:last-child { border-bottom: none; }
+    .row.indent { padding-left: 16px; }
+    .row.muted { opacity: 0.38; }
+    .row-left { flex: 1; }
+    .row-lbl { font-size: 13px; font-weight: 600; color: var(--text); }
+    .row-lbl.big { font-size: 14px; font-weight: 700; }
+    .row-sub { font-size: 10px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; line-height: 1.4; }
+    .row-val {
+      font-size: 14px; font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      text-align: right; margin-left: 10px; flex-shrink: 0;
+    }
+    .row-val.big { font-size: 17px; }
+
+    /* ── Manque palier ── */
+    .palier-next {
+      padding: 10px 14px; margin: 0 -14px;
+      background: #f3f0ff; border-radius: 0 0 12px 12px;
+      font-size: 11px; color: var(--purple);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── Net total ── */
+    .net-box {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      border-radius: 14px; padding: 18px 16px; margin-top: 4px;
+    }
+    .net-box-row { display: flex; justify-content: space-between; align-items: center; }
+    .net-lbl { font-size: 11px; color: rgba(255,255,255,0.55); font-family: 'DM Mono', monospace; margin-bottom: 4px; }
+    .net-sub { font-size: 10px; color: rgba(255,255,255,0.3); font-family: 'DM Mono', monospace; }
+    .net-val {
+      font-size: 32px; font-weight: 800; color: var(--green);
+      font-family: 'Playfair Display', serif;
+    }
+    .net-note {
+      margin-top: 10px; font-size: 10px;
+      color: rgba(255,255,255,0.3); font-family: 'DM Mono', monospace;
+      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; line-height: 1.5;
+    }
+
+    /* ── CA recap ── */
+    .ca-recap {
+      margin-top: 12px; padding: 10px 14px;
+      background: #f0f4f8; border-radius: 10px;
+      font-size: 11px; font-family: 'DM Mono', monospace; color: #666;
+      line-height: 1.5;
+    }
+    .ca-recap strong { color: var(--blue); }
+
+    /* ── Animations ── */
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:none; } }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(14px);  } to { opacity:1; transform:none; } }
+    .pulse { animation: pulse 0.25s ease; }
+    @keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.015); } }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-badge">Efficity · BNC SSI · 2026</div>
+    <h1>Calculateur commission</h1>
+    <p>TTC → HT → Rétrocession → URSSAF → Net</p>
+  </div>
+
+  <div class="card" id="card">
+
+    <!-- ① Saisie -->
+    <div class="section">
+      <div class="section-title"><span></span>① Saisie<span></span></div>
+      <div class="section-inner">
+        <div class="input-group">
+          <label class="input-label">Honoraires TTC perçus</label>
+          <div class="input-wrap">
+            <input type="number" id="ttc" value="10000" min="0" step="100" inputmode="decimal" />
+            <span class="input-suffix">€ TTC</span>
+          </div>
+
+          <label class="input-label">CA HT cumulé cette année (avant cette vente)</label>
+          <div class="input-wrap" style="margin-bottom:0">
+            <input type="number" id="cumul" value="0" min="0" step="100" inputmode="decimal" />
+            <span class="input-suffix">€ HT</span>
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Versement libératoire IR</div>
+              <div class="toggle-sub">+2,2 % sur votre rétrocession</div>
+            </div>
+            <button class="toggle on" id="vlToggle" onclick="toggleVL()" aria-pressed="true">
+              <div class="toggle-knob"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Palier bar -->
+    <div class="palier-wrap">
+      <div class="palier-label">Palier Efficity actuel</div>
+      <div class="palier-track">
+        <div class="palier-fill" id="palierFill"></div>
+        <!-- dots injected by JS -->
+        <div id="palierDots"></div>
+      </div>
+    </div>
+
+    <!-- ② Honoraires -->
+    <div class="section">
+      <div class="section-title"><span></span>② Honoraires<span></span></div>
+      <div class="section-inner">
+        <div class="row">
+          <div class="row-left"><div class="row-lbl big">Honoraires TTC</div><div class="row-sub">Montant encaissé du client</div></div>
+          <div class="row-val big" id="r-ttc" style="color:#1a1a2e"></div>
+        </div>
+        <div class="row indent">
+          <div class="row-left"><div class="row-lbl">TVA collectée (20 %)</div><div class="row-sub">À reverser à l'État · ne t'appartient pas</div></div>
+          <div class="row-val" id="r-tva" style="color:#e53935"></div>
+        </div>
+        <div class="row">
+          <div class="row-left"><div class="row-lbl big">Honoraires HT</div><div class="row-sub">Ton CA réel · base de calcul URSSAF</div></div>
+          <div class="row-val big" id="r-ht" style="color:#1a4a7a"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ Rétrocession -->
+    <div class="section">
+      <div class="section-title"><span></span>③ Rétrocession Efficity<span></span></div>
+      <div class="section-inner">
+        <div class="row">
+          <div class="row-left">
+            <div class="row-lbl big" id="r-retro-lbl">Ta rétrocession</div>
+            <div class="row-sub" id="r-retro-sub"></div>
+          </div>
+          <div class="row-val big" id="r-retro" style="color:#7c3aed"></div>
+        </div>
+        <div class="row indent">
+          <div class="row-left">
+            <div class="row-lbl" id="r-efficity-lbl">Part Efficity</div>
+            <div class="row-sub">Frais réseau</div>
+          </div>
+          <div class="row-val" id="r-efficity" style="color:#e53935"></div>
+        </div>
+        <div id="palierNextBox" class="palier-next" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- ④ URSSAF -->
+    <div class="section">
+      <div class="section-title"><span></span>④ Cotisations URSSAF<span></span></div>
+      <div class="section-inner">
+        <div class="row">
+          <div class="row-left"><div class="row-lbl">Base de calcul</div><div class="row-sub">Ta rétrocession = ton CA encaissé</div></div>
+          <div class="row-val" id="r-base" style="color:#1a1a2e"></div>
+        </div>
+        <div class="row indent">
+          <div class="row-left"><div class="row-lbl">Cotisations sociales (25,6 %)</div><div class="row-sub">Maladie, retraite, CSG-CRDS — BNC SSI 2026</div></div>
+          <div class="row-val" id="r-cot" style="color:#e53935"></div>
+        </div>
+        <div class="row indent">
+          <div class="row-left"><div class="row-lbl">CFP (0,1 %)</div><div class="row-sub">Formation professionnelle</div></div>
+          <div class="row-val" id="r-cfp" style="color:#e53935"></div>
+        </div>
+        <div class="row indent" id="vlRow">
+          <div class="row-left"><div class="row-lbl">Versement libératoire IR (2,2 %)</div><div class="row-sub">IR soldé avec les cotisations</div></div>
+          <div class="row-val" id="r-vl" style="color:#f59e0b"></div>
+        </div>
+        <div class="row">
+          <div class="row-left">
+            <div class="row-lbl big">Total URSSAF</div>
+            <div class="row-sub" id="r-urssaf-sub"></div>
+          </div>
+          <div class="row-val big" id="r-urssaf" style="color:#e53935"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Net -->
+    <div class="net-box" id="netBox">
+      <div class="net-box-row">
+        <div>
+          <div class="net-lbl" id="netLbl">Net après URSSAF + IR soldé</div>
+          <div class="net-sub" id="netSub"></div>
+        </div>
+        <div class="net-val" id="netVal"></div>
+      </div>
+      <div class="net-note" id="netNote" style="display:none"></div>
+    </div>
+
+    <!-- CA recap -->
+    <div class="ca-recap" id="caRecap"></div>
+
+  </div>
+</div>
+
+<script>
+// ── Données ───────────────────────────────────────────────────────────────────
+const PALIERS = [
+  { seuil: 0,      label: "Départ", taux: 0.70 },
+  { seuil: 25000,  label: "25k€",   taux: 0.78 },
+  { seuil: 50000,  label: "50k€",   taux: 0.90 },
+  { seuil: 150000, label: "150k€",  taux: 1.00 },
+];
+const TVA = 0.20;
+const URSSAF = 0.256;
+const CFP = 0.001;
+const VLIR = 0.022;
+const TRACK_MAX = 175000;
+
+let vlirActive = true;
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fmt(n) {
+  return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+function pct(n) { return Math.round(n * 100) + ' %'; }
+function getPalier(cumul) {
+  let p = PALIERS[0];
+  for (const x of PALIERS) if (cumul >= x.seuil) p = x;
+  return p;
+}
+function getNext(cumul) {
+  return PALIERS.find(p => p.seuil > cumul) || null;
+}
+function q(id) { return document.getElementById(id); }
+
+// ── Palier dots init ──────────────────────────────────────────────────────────
+function initDots() {
+  const container = q('palierDots');
+  container.innerHTML = '';
+  PALIERS.forEach((p, i) => {
+    const xPct = i === 0 ? 0 : Math.min((p.seuil / TRACK_MAX) * 100, 98);
+    const dot = document.createElement('div');
+    dot.className = 'palier-dot';
+    dot.id = 'dot-' + i;
+    dot.style.left = xPct + '%';
+    dot.innerHTML = `
+      <div class="palier-dot-inner"></div>
+      <div class="palier-dot-label">${pct(p.taux)}<br><span style="font-size:8px;color:#bbb">${p.label}</span></div>
+    `;
+    container.appendChild(dot);
+  });
+}
+
+// ── Update ────────────────────────────────────────────────────────────────────
+function update() {
+  const ttc   = parseFloat(q('ttc').value)   || 0;
+  const cumul = parseFloat(q('cumul').value) || 0;
+
+  const ht   = ttc / (1 + TVA);
+  const tva  = ttc - ht;
+
+  const palier = getPalier(cumul);
+  const next   = getNext(cumul);
+  const retro  = ht * palier.taux;
+  const effPart = ht * (1 - palier.taux);
+  const manque = next ? Math.max(0, next.seuil - cumul) : 0;
+
+  const cotis  = retro * URSSAF;
+  const cfp    = retro * CFP;
+  const vlMnt  = vlirActive ? retro * VLIR : 0;
+  const totalU = cotis + cfp + vlMnt;
+  const totalTaux = URSSAF + CFP + (vlirActive ? VLIR : 0);
+
+  const net = retro - totalU;
+  const caApres = cumul + ht;
+
+  // Palier bar
+  const fillPct = Math.min((cumul / TRACK_MAX) * 100, 100);
+  q('palierFill').style.width = fillPct + '%';
+  PALIERS.forEach((p, i) => {
+    const dot = q('dot-' + i);
+    if (dot) dot.className = 'palier-dot' + (cumul >= p.seuil ? ' active' : '');
+  });
+
+  // Honoraires
+  q('r-ttc').textContent = fmt(ttc);
+  q('r-tva').textContent = '− ' + fmt(tva);
+  q('r-ht').textContent  = fmt(ht);
+
+  // Rétrocession
+  q('r-retro-lbl').textContent = 'Ta rétrocession (' + pct(palier.taux) + ')';
+  q('r-retro-sub').textContent = 'Efficity te reverse ' + pct(palier.taux) + ' des honoraires HT · palier ' + palier.label;
+  q('r-retro').textContent     = fmt(retro);
+  q('r-efficity-lbl').textContent = 'Part Efficity (' + pct(1 - palier.taux) + ')';
+  q('r-efficity').textContent  = '− ' + fmt(effPart);
+
+  const nextBox = q('palierNextBox');
+  if (next) {
+    nextBox.style.display = 'block';
+    nextBox.textContent = '📈 Il manque ' + fmt(manque).replace(' €','') + ' € HT pour passer à ' + pct(next.taux) + ' (' + next.label + ')';
+  } else {
+    nextBox.style.display = 'none';
+  }
+
+  // URSSAF
+  q('r-base').textContent  = fmt(retro);
+  q('r-cot').textContent   = '− ' + fmt(cotis);
+  q('r-cfp').textContent   = '− ' + fmt(cfp);
+  const vlRow = q('vlRow');
+  if (vlirActive) {
+    vlRow.classList.remove('muted');
+    q('r-vl').textContent = '− ' + fmt(vlMnt);
+    q('r-vl').style.color = '#f59e0b';
+  } else {
+    vlRow.classList.add('muted');
+    q('r-vl').textContent = '—';
+    q('r-vl').style.color = '#ccc';
+  }
+  q('r-urssaf-sub').textContent = fmt(retro) + ' × ' + (Math.round(totalTaux * 1000) / 10).toFixed(1).replace('.',',') + ' %';
+  q('r-urssaf').textContent = '− ' + fmt(totalU);
+
+  // Net
+  q('netLbl').textContent = vlirActive ? 'Net après URSSAF + IR soldé' : 'Net avant IR · après URSSAF';
+  q('netSub').textContent = fmt(retro) + ' − ' + fmt(totalU);
+  q('netVal').textContent = fmt(net);
+
+  const note = q('netNote');
+  if (!vlirActive) {
+    note.style.display = 'block';
+    const base = retro * 0.66;
+    note.textContent = 'IR à régler via déclaration annuelle · base imposable micro-BNC : ' + fmt(base) + ' (abattement 34 %)';
+  } else {
+    note.style.display = 'none';
+  }
+
+  // Recap CA
+  q('caRecap').innerHTML = 'CA HT cumulé après cette vente : <strong>' + fmt(caApres) + '</strong>' +
+    (next ? ' · prochain palier à ' + fmt(next.seuil) : ' · palier maximum 🎯');
+
+  // Pulse animation
+  const card = q('netVal');
+  card.classList.remove('pulse');
+  void card.offsetWidth;
+  card.classList.add('pulse');
+}
+
+function toggleVL() {
+  vlirActive = !vlirActive;
+  const btn = q('vlToggle');
+  btn.classList.toggle('on', vlirActive);
+  btn.setAttribute('aria-pressed', vlirActive);
+  update();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+initDots();
+update();
+
+q('ttc').addEventListener('input', update);
+q('cumul').addEventListener('input', update);
+
+// ── Service Worker ────────────────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
