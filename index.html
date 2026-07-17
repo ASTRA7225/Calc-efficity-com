@@ -12,9 +12,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Efficity" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +29,6 @@
       --green: #4ade80;
       --green-bg: #f0fdf4;
       --green-text: #166534;
-      --bg: #f4f6f9;
       --card: #ffffff;
       --text: #1a1a2e;
       --muted: #888;
@@ -40,19 +38,13 @@
     }
 
     html, body {
-      height: 100%;
       background: var(--navy);
       font-family: 'DM Sans', sans-serif;
       color: var(--text);
       -webkit-font-smoothing: antialiased;
     }
+    body { padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
 
-    body {
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
-    }
-
-    /* ── Layout ── */
     .app {
       min-height: 100dvh;
       background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 50%, var(--navy) 100%);
@@ -60,818 +52,796 @@
     }
 
     /* ── Header ── */
-    .header {
-      text-align: center;
-      margin-bottom: 18px;
-      color: #fff;
-      animation: fadeDown 0.5s ease both;
-    }
+    .header { text-align: center; margin-bottom: 18px; color: #fff; animation: fadeDown 0.5s ease both; }
     .header-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 10px;
+      display: inline-block; background: rgba(255,255,255,0.1); border-radius: 20px;
+      padding: 4px 14px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: 'DM Mono', monospace; margin-bottom: 10px;
     }
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 3px;
-    }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 3px; }
     .header p { font-size: 12px; opacity: 0.5; font-style: italic; }
 
-    /* ── Card ── */
     .card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 20px 16px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
-      max-width: 480px;
-      margin: 0 auto;
+      background: var(--card); border-radius: 20px; padding: 20px 16px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4); max-width: 520px; margin: 0 auto 14px;
       animation: fadeUp 0.5s ease both 0.1s;
     }
 
-    /* ── Section ── */
     .section { margin-bottom: 18px; }
+    .section:last-child { margin-bottom: 0; }
     .section-title {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em;
+      font-family: 'DM Mono', monospace; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px; color: var(--muted);
     }
-    .section-title span { flex: 1; height: 1px; background: var(--border); display: block; }
-    .section-inner {
-      background: #fafafa;
-      border-radius: 12px;
-      padding: 0 14px;
-      overflow: hidden;
-    }
+    .section-title span.rule { flex: 1; height: 1px; background: var(--border); display: block; }
+    .section-inner { background: #fafafa; border-radius: 12px; padding: 14px; }
 
-    /* ── Input ── */
-    .input-group { padding: 14px 0 8px; }
+    /* ── Inputs ── */
     .input-label {
-      display: block;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 6px;
+      display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 6px;
     }
     .input-wrap {
-      display: flex;
-      align-items: center;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      background: #fff;
-      transition: border-color 0.2s;
-      margin-bottom: 12px;
+      display: flex; align-items: center; border: 2px solid var(--border);
+      border-radius: 10px; background: #fff; transition: border-color 0.2s;
     }
     .input-wrap:focus-within { border-color: var(--blue2); }
     .input-wrap input {
-      flex: 1;
-      border: none;
-      outline: none;
-      padding: 12px 14px;
-      font-size: 20px;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      color: var(--navy);
-      background: transparent;
-      width: 100%;
+      flex: 1; min-width: 0; border: none; outline: none; padding: 12px 14px;
+      font-size: 20px; font-family: 'Playfair Display', serif; font-weight: 700;
+      color: var(--navy); background: transparent;
     }
     .input-suffix {
-      padding: 0 14px;
-      color: var(--muted);
-      font-size: 12px;
-      font-family: 'DM Mono', monospace;
-      white-space: nowrap;
+      padding: 0 14px; color: var(--muted); font-size: 12px;
+      font-family: 'DM Mono', monospace; white-space: nowrap;
     }
 
     /* ── Toggle ── */
     .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0 0; margin-top: 12px; border-top: 1px solid var(--border);
     }
-    .toggle-label { font-size: 13px; font-weight: 600; color: var(--text); }
+    .toggle-label { font-size: 13px; font-weight: 600; }
     .toggle-sub { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
     .toggle {
-      width: 46px; height: 25px; border-radius: 13px; border: none;
-      cursor: pointer; position: relative; transition: background 0.25s;
-      flex-shrink: 0; background: #ddd;
+      width: 46px; height: 25px; border-radius: 13px; border: none; cursor: pointer;
+      position: relative; transition: background 0.25s; flex-shrink: 0; background: #ddd;
     }
     .toggle.on { background: var(--amber); }
     .toggle-knob {
-      position: absolute; top: 3px; left: 3px;
-      width: 19px; height: 19px; border-radius: 50%;
-      background: #fff; transition: transform 0.25s;
+      position: absolute; top: 3px; left: 3px; width: 19px; height: 19px;
+      border-radius: 50%; background: #fff; transition: transform 0.25s;
       box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
     .toggle.on .toggle-knob { transform: translateX(21px); }
 
-    /* ── Bloc cumul calculé ── */
-    .cumul-box {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 12px; padding: 10px 12px;
-      background: #eef4fb; border-radius: 10px;
-      border-left: 3px solid var(--blue);
-    }
-    .cumul-lbl { font-size: 11px; color: var(--blue); font-family: 'DM Mono', monospace; }
-    .cumul-val {
-      font-size: 17px; font-weight: 800; color: var(--blue);
-      font-family: 'Playfair Display', serif;
-    }
-
-    /* ── Liste des ventes ── */
-    .vente {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 0; border-bottom: 1px solid var(--border);
-    }
-    .vente:last-child { border-bottom: none; }
-    .vente-num {
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--blue); color: #fff;
-      font-size: 10px; font-family: 'DM Mono', monospace;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-weight: 600;
-    }
-    .vente-num.report { background: #9aa8b8; }
-    .vente-main { flex: 1; min-width: 0; }
-    .vente-ht {
-      font-size: 13px; font-weight: 700; color: var(--text);
-      font-family: 'Playfair Display', serif;
-    }
-    .vente-meta { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 1px; }
-    .vente-edit {
-      width: 92px; border: 1px solid var(--border); border-radius: 7px;
-      padding: 6px 8px; font-size: 12px; font-family: 'DM Mono', monospace;
-      color: var(--text); outline: none; text-align: right;
-    }
-    .vente-edit:focus { border-color: var(--blue2); }
-    .vente-del {
-      background: none; border: none; cursor: pointer;
-      color: #c9c9c9; font-size: 17px; line-height: 1;
-      padding: 4px 2px; flex-shrink: 0; transition: color 0.15s;
-    }
-    .vente-del:hover, .vente-del:active { color: var(--red); }
-    .ventes-empty {
-      font-size: 11px; color: var(--muted);
-      font-family: 'DM Mono', monospace; padding: 10px 0; text-align: center;
-    }
-
-    /* ── Boutons d'action ── */
-    .actions { display: flex; gap: 8px; padding: 10px 0 14px; }
-    .btn {
-      flex: 1; border: none; border-radius: 10px; cursor: pointer;
-      padding: 12px 10px; font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 600; transition: transform 0.12s, opacity 0.2s;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--blue); color: #fff; }
-    .btn-ghost {
-      background: transparent; color: var(--muted);
-      border: 1px solid var(--border); flex: 0 0 auto; padding: 12px 14px;
-    }
-    .saved-flag {
-      font-size: 10px; font-family: 'DM Mono', monospace;
-      color: var(--green-text); background: var(--green-bg);
-      border-radius: 6px; padding: 6px 10px; margin-bottom: 10px;
-      opacity: 0; transition: opacity 0.3s; text-align: center;
-    }
-    .saved-flag.show { opacity: 1; }
-
     /* ── Palier bar ── */
-    .palier-wrap { margin-bottom: 18px; }
-    .palier-label { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
-    .palier-track {
-      position: relative; height: 8px;
-      background: #e8e8e8; border-radius: 4px; margin-bottom: 28px;
+    .palier-head {
+      display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;
     }
+    .palier-label { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .palier-cumul { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 18px; color: var(--blue); }
+    .palier-track { position: relative; height: 8px; background: #e8e8e8; border-radius: 4px; margin-bottom: 30px; }
     .palier-fill {
-      position: absolute; left: 0; top: 0; height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, var(--blue), var(--blue2));
-      transition: width 0.4s ease;
+      position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--blue2)); transition: width 0.4s ease;
     }
-    .palier-dot {
-      position: absolute; top: 50%; transform: translate(-50%, -50%);
-    }
+    .palier-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); }
     .palier-dot-inner {
-      width: 12px; height: 12px; border-radius: 50%;
-      border: 2px solid #fff; background: #ccc;
-      box-shadow: none; transition: background 0.3s, box-shadow 0.3s;
+      width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff;
+      background: #ccc; transition: background 0.3s, box-shadow 0.3s;
     }
-    .palier-dot.active .palier-dot-inner {
-      background: var(--blue2);
-      box-shadow: 0 0 0 3px rgba(33,150,243,0.25);
-    }
+    .palier-dot.active .palier-dot-inner { background: var(--blue2); box-shadow: 0 0 0 3px rgba(33,150,243,0.25); }
     .palier-dot-label {
-      position: absolute; top: 14px; left: 50%;
-      transform: translateX(-50%);
-      font-size: 9px; font-family: 'DM Mono', monospace;
-      white-space: nowrap; text-align: center; line-height: 1.3;
-      color: #aaa;
+      position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      font-size: 9px; font-family: 'DM Mono', monospace; white-space: nowrap;
+      text-align: center; line-height: 1.3; color: #aaa;
     }
     .palier-dot.active .palier-dot-label { color: var(--blue); font-weight: 600; }
+    .palier-next {
+      padding: 9px 12px; background: #f3f0ff; border-radius: 9px;
+      font-size: 11px; color: var(--purple); font-family: 'DM Mono', monospace; line-height: 1.5;
+    }
 
-    /* ── Rows ── */
+    /* ── Boutons ── */
+    .btn {
+      border: none; border-radius: 10px; cursor: pointer; padding: 12px 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+      transition: transform 0.12s, opacity 0.2s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--blue); color: #fff; width: 100%; margin-top: 10px; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .flash {
+      font-size: 10px; font-family: 'DM Mono', monospace; color: var(--green-text);
+      background: var(--green-bg); border-radius: 6px; padding: 7px 10px; margin-top: 10px;
+      text-align: center; opacity: 0; transition: opacity 0.3s; height: 0; overflow: hidden;
+    }
+    .flash.show { opacity: 1; height: auto; }
+
+    /* ── Liste des ventes ── */
+    .ventes-count { font-size: 9px; font-family: 'DM Mono', monospace; color: var(--muted); }
+    .vente {
+      border: 1px solid var(--border); border-radius: 12px;
+      margin-bottom: 8px; overflow: hidden; background: #fff;
+    }
+    .vente.open { border-color: #d6e4f2; box-shadow: 0 4px 14px rgba(26,74,122,0.07); }
+    .vente-head {
+      display: flex; align-items: center; gap: 10px; padding: 11px 12px; cursor: pointer;
+      user-select: none;
+    }
+    .vente-num {
+      width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff;
+      font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .vente-num.split { background: var(--purple); }
+    .vente-num.report { background: #9aa8b8; }
+    .vente-main { flex: 1; min-width: 0; }
+    .vente-t { font-size: 13px; font-weight: 700; font-family: 'Playfair Display', serif; }
+    .vente-meta {
+      font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace;
+      margin-top: 2px; line-height: 1.4;
+    }
+    .vente-net { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 14px; color: var(--green-text); }
+    .vente-chev { color: #c9c9c9; font-size: 11px; transition: transform 0.2s; flex-shrink: 0; }
+    .vente.open .vente-chev { transform: rotate(180deg); }
+    .vente-body { padding: 0 12px 12px; }
+    .badge-split {
+      display: inline-block; background: #f3f0ff; color: var(--purple);
+      font-family: 'DM Mono', monospace; font-size: 9px; padding: 1px 6px;
+      border-radius: 5px; margin-left: 6px; vertical-align: 1px;
+    }
+
+    /* ── Édition d'une vente ── */
+    .edit-grid { display: flex; gap: 8px; margin-bottom: 12px; }
+    .edit-field { flex: 1; }
+    .edit-field.date { flex: 0 0 132px; }
+    .edit-lbl {
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 4px; display: block;
+    }
+    .edit-in {
+      width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+      font-size: 13px; font-family: 'DM Mono', monospace; color: var(--text);
+      outline: none; background: #fff;
+    }
+    .edit-in:focus { border-color: var(--blue2); }
+    .vente-tools { display: flex; gap: 6px; margin-top: 12px; }
+    .tool {
+      background: #fafafa; border: 1px solid var(--border); border-radius: 8px;
+      padding: 7px 10px; font-size: 11px; font-family: 'DM Mono', monospace;
+      color: var(--muted); cursor: pointer;
+    }
+    .tool:disabled { opacity: 0.3; cursor: default; }
+    .tool.danger { margin-left: auto; color: var(--red); border-color: #f8d7d7; }
+
+    /* ── Cascade ── */
     .row {
       display: flex; justify-content: space-between; align-items: flex-start;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-      transition: opacity 0.3s;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
     }
     .row:last-child { border-bottom: none; }
-    .row.indent { padding-left: 16px; }
+    .row.indent { padding-left: 14px; }
     .row.muted { opacity: 0.38; }
     .row-left { flex: 1; }
-    .row-lbl { font-size: 13px; font-weight: 600; color: var(--text); }
-    .row-lbl.big { font-size: 14px; font-weight: 700; }
-    .row-sub { font-size: 10px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; line-height: 1.4; }
-    .row-val {
-      font-size: 14px; font-weight: 700;
-      font-family: 'Playfair Display', serif;
-      text-align: right; margin-left: 10px; flex-shrink: 0;
-    }
-    .row-val.big { font-size: 17px; }
-
-    /* ── Manque palier ── */
-    .palier-next {
-      padding: 10px 14px; margin: 0 -14px;
-      background: #f3f0ff; border-radius: 0 0 12px 12px;
-      font-size: 11px; color: var(--purple);
-      font-family: 'DM Mono', monospace;
+    .row-lbl { font-size: 12px; font-weight: 600; }
+    .row-lbl.big { font-size: 13px; font-weight: 700; }
+    .row-sub { font-size: 9px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; line-height: 1.4; }
+    .row-val { font-size: 13px; font-weight: 700; font-family: 'Playfair Display', serif; text-align: right; margin-left: 10px; flex-shrink: 0; }
+    .row-val.big { font-size: 15px; }
+    .cascade { background: #fafafa; border-radius: 10px; padding: 2px 12px; }
+    .cascade-title {
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); font-family: 'DM Mono', monospace; padding: 10px 0 2px;
     }
 
-    /* ── Net total ── */
+    /* ── Tranche de palier ── */
+    .tranche {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 10px; border-radius: 8px; background: #eef4fb;
+      margin-bottom: 5px; border-left: 3px solid var(--blue2);
+    }
+    .tranche.t2 { background: #f3f0ff; border-left-color: var(--purple); }
+    .tranche-l { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--blue); }
+    .tranche.t2 .tranche-l { color: var(--purple); }
+    .tranche-sub { font-size: 9px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 2px; }
+    .tranche-v { font-size: 12px; font-weight: 700; font-family: 'Playfair Display', serif; color: var(--blue); }
+    .tranche.t2 .tranche-v { color: var(--purple); }
+
+    /* ── Net box ── */
     .net-box {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
-      border-radius: 14px; padding: 18px 16px; margin-top: 4px;
+      border-radius: 14px; padding: 16px; margin-top: 10px;
     }
-    .net-box-row { display: flex; justify-content: space-between; align-items: center; }
+    .net-box-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
     .net-lbl { font-size: 11px; color: rgba(255,255,255,0.55); font-family: 'DM Mono', monospace; margin-bottom: 4px; }
     .net-sub { font-size: 10px; color: rgba(255,255,255,0.3); font-family: 'DM Mono', monospace; }
-    .net-val {
-      font-size: 32px; font-weight: 800; color: var(--green);
-      font-family: 'Playfair Display', serif;
-    }
+    .net-val { font-size: 28px; font-weight: 800; color: var(--green); font-family: 'Playfair Display', serif; }
     .net-note {
-      margin-top: 10px; font-size: 10px;
-      color: rgba(255,255,255,0.3); font-family: 'DM Mono', monospace;
-      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; line-height: 1.5;
+      margin-top: 10px; font-size: 10px; color: rgba(255,255,255,0.32);
+      font-family: 'DM Mono', monospace; border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 8px; line-height: 1.5;
     }
 
-    /* ── CA recap ── */
-    .ca-recap {
-      margin-top: 12px; padding: 10px 14px;
-      background: #f0f4f8; border-radius: 10px;
-      font-size: 11px; font-family: 'DM Mono', monospace; color: #666;
-      line-height: 1.5;
+    .empty {
+      text-align: center; padding: 24px 12px; font-family: 'DM Mono', monospace;
+      font-size: 11px; color: var(--muted); line-height: 1.6;
+      border: 1px dashed var(--border); border-radius: 12px;
     }
-    .ca-recap strong { color: var(--blue); }
+    .warn {
+      background: #fffbeb; border-radius: 9px; padding: 9px 12px; margin-top: 10px;
+      font-size: 10px; font-family: 'DM Mono', monospace; color: #92400e; line-height: 1.5;
+    }
+    .foot {
+      max-width: 520px; margin: 0 auto; text-align: center; padding: 4px 8px 0;
+      font-size: 9px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.28); line-height: 1.6;
+    }
 
-    /* ── Animations ── */
     @keyframes fadeDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:none; } }
     @keyframes fadeUp   { from { opacity:0; transform:translateY(14px);  } to { opacity:1; transform:none; } }
-    .pulse { animation: pulse 0.25s ease; }
-    @keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.015); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+    :focus-visible { outline: 2px solid var(--blue2); outline-offset: 2px; }
   </style>
 </head>
 <body>
 <div class="app">
 
   <div class="header">
-    <div class="header-badge">Efficity · BNC SSI · 2026</div>
+    <div class="header-badge">Efficity · BNC SSI · <span id="anneeBadge">2026</span></div>
     <h1>Calculateur commission</h1>
     <p>TTC → HT → Rétrocession → URSSAF → Net</p>
   </div>
 
-  <div class="card" id="card">
-
-    <!-- ① Saisie -->
+  <!-- ══ Carte 1 : paramètres + palier ══ -->
+  <div class="card">
     <div class="section">
-      <div class="section-title"><span></span>① Saisie<span></span></div>
+      <div class="section-title"><span class="rule"></span>Paramètres de l'année<span class="rule"></span></div>
       <div class="section-inner">
-        <div class="input-group">
-          <label class="input-label">Honoraires TTC perçus</label>
-          <div class="input-wrap">
-            <input type="number" id="ttc" value="10000" min="0" step="100" inputmode="decimal" />
-            <span class="input-suffix">€ TTC</span>
+        <label class="input-label" for="report">CA HT déjà réalisé avant d'utiliser l'app</label>
+        <div class="input-wrap">
+          <input type="text" id="report" inputmode="decimal" data-focuskey="report" placeholder="0" />
+          <span class="input-suffix">€ HT</span>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Versement libératoire IR</div>
+            <div class="toggle-sub">+2,2 % sur chaque rétrocession</div>
           </div>
-
-          <label class="input-label">Report : CA HT déjà réalisé avant d'utiliser l'app</label>
-          <div class="input-wrap" style="margin-bottom:0">
-            <input type="number" id="report" value="0" min="0" step="100" inputmode="decimal" />
-            <span class="input-suffix">€ HT</span>
-          </div>
-
-          <div class="cumul-box">
-            <span class="cumul-lbl">CA HT cumulé <span id="cumulCount"></span></span>
-            <span class="cumul-val" id="cumulVal"></span>
-          </div>
-
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">Versement libératoire IR</div>
-              <div class="toggle-sub">+2,2 % sur votre rétrocession</div>
-            </div>
-            <button class="toggle on" id="vlToggle" onclick="toggleVL()" aria-pressed="true">
-              <div class="toggle-knob"></div>
-            </button>
-          </div>
-
-          <div class="saved-flag" id="savedFlag"></div>
-          <div class="actions">
-            <button class="btn btn-primary" onclick="validerVente()">
-              ✓ Valider cette vente
-            </button>
-            <button class="btn btn-ghost" onclick="resetAnnee()" title="Remettre le cumul à zéro">
-              ↺
-            </button>
-          </div>
+          <button class="toggle on" id="vlToggle" aria-pressed="true" aria-label="Versement libératoire IR">
+            <div class="toggle-knob"></div>
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Ventes enregistrées -->
-    <div class="section" id="ventesSection" style="display:none">
-      <div class="section-title"><span></span><span id="ventesTitle" style="flex:0 0 auto"></span><span></span></div>
-      <div class="section-inner" style="padding: 6px 14px 10px">
-        <div id="ventesList"></div>
+    <div class="section">
+      <div class="section-title"><span class="rule"></span>Palier Efficity<span class="rule"></span></div>
+      <div class="palier-head">
+        <span class="palier-label">CA HT cumulé · <span id="palierTaux"></span></span>
+        <span class="palier-cumul" id="palierCumul"></span>
       </div>
-    </div>
-
-    <!-- Palier bar -->
-    <div class="palier-wrap">
-      <div class="palier-label">Palier Efficity actuel</div>
       <div class="palier-track">
         <div class="palier-fill" id="palierFill"></div>
-        <!-- dots injected by JS -->
         <div id="palierDots"></div>
       </div>
+      <div class="palier-next" id="palierNext"></div>
     </div>
+  </div>
 
-    <!-- ② Honoraires -->
+  <!-- ══ Carte 2 : ajouter une vente ══ -->
+  <div class="card">
     <div class="section">
-      <div class="section-title"><span></span>② Honoraires<span></span></div>
+      <div class="section-title"><span class="rule"></span>Ajouter une vente<span class="rule"></span></div>
       <div class="section-inner">
-        <div class="row">
-          <div class="row-left"><div class="row-lbl big">Honoraires TTC</div><div class="row-sub">Montant encaissé du client</div></div>
-          <div class="row-val big" id="r-ttc" style="color:#1a1a2e"></div>
+        <label class="input-label" for="newTtc">Honoraires TTC perçus</label>
+        <div class="input-wrap">
+          <input type="text" id="newTtc" inputmode="decimal" placeholder="0" data-focuskey="newTtc" />
+          <span class="input-suffix">€ TTC</span>
         </div>
-        <div class="row indent">
-          <div class="row-left"><div class="row-lbl">TVA collectée (20 %)</div><div class="row-sub">À reverser à l'État · ne t'appartient pas</div></div>
-          <div class="row-val" id="r-tva" style="color:#e53935"></div>
-        </div>
-        <div class="row">
-          <div class="row-left"><div class="row-lbl big">Honoraires HT</div><div class="row-sub">Ton CA réel · base de calcul URSSAF</div></div>
-          <div class="row-val big" id="r-ht" style="color:#1a4a7a"></div>
-        </div>
+        <button class="btn btn-primary" id="addBtn">Ajouter la vente</button>
+        <div class="flash" id="flash"></div>
       </div>
     </div>
+  </div>
 
-    <!-- ③ Rétrocession -->
+  <!-- ══ Carte 3 : liste des ventes ══ -->
+  <div class="card">
     <div class="section">
-      <div class="section-title"><span></span>③ Rétrocession Efficity<span></span></div>
-      <div class="section-inner">
-        <div class="row">
-          <div class="row-left">
-            <div class="row-lbl big" id="r-retro-lbl">Ta rétrocession</div>
-            <div class="row-sub" id="r-retro-sub"></div>
-          </div>
-          <div class="row-val big" id="r-retro" style="color:#7c3aed"></div>
-        </div>
-        <div class="row indent">
-          <div class="row-left">
-            <div class="row-lbl" id="r-efficity-lbl">Part Efficity</div>
-            <div class="row-sub">Frais réseau</div>
-          </div>
-          <div class="row-val" id="r-efficity" style="color:#e53935"></div>
-        </div>
-        <div id="palierNextBox" class="palier-next" style="display:none"></div>
+      <div class="section-title">
+        <span class="rule"></span>Ventes de l'année <span class="ventes-count" id="ventesCount"></span><span class="rule"></span>
       </div>
+      <div id="ventesList"></div>
     </div>
+  </div>
 
-    <!-- ④ URSSAF -->
+  <!-- ══ Carte 4 : totaux ══ -->
+  <div class="card">
     <div class="section">
-      <div class="section-title"><span></span>④ Cotisations URSSAF<span></span></div>
-      <div class="section-inner">
-        <div class="row">
-          <div class="row-left"><div class="row-lbl">Base de calcul</div><div class="row-sub">Ta rétrocession = ton CA encaissé</div></div>
-          <div class="row-val" id="r-base" style="color:#1a1a2e"></div>
-        </div>
-        <div class="row indent">
-          <div class="row-left"><div class="row-lbl">Cotisations sociales (25,6 %)</div><div class="row-sub">Maladie, retraite, CSG-CRDS — BNC SSI 2026</div></div>
-          <div class="row-val" id="r-cot" style="color:#e53935"></div>
-        </div>
-        <div class="row indent">
-          <div class="row-left"><div class="row-lbl">CFP (0,1 %)</div><div class="row-sub">Formation professionnelle</div></div>
-          <div class="row-val" id="r-cfp" style="color:#e53935"></div>
-        </div>
-        <div class="row indent" id="vlRow">
-          <div class="row-left"><div class="row-lbl">Versement libératoire IR (2,2 %)</div><div class="row-sub">IR soldé avec les cotisations</div></div>
-          <div class="row-val" id="r-vl" style="color:#f59e0b"></div>
-        </div>
-        <div class="row">
-          <div class="row-left">
-            <div class="row-lbl big">Total URSSAF</div>
-            <div class="row-sub" id="r-urssaf-sub"></div>
+      <div class="section-title"><span class="rule"></span>Total de l'année<span class="rule"></span></div>
+      <div class="cascade" id="totaux"></div>
+      <div class="net-box">
+        <div class="net-box-row">
+          <div>
+            <div class="net-lbl" id="totNetLbl">Net cumulé après URSSAF + IR soldé</div>
+            <div class="net-sub" id="totNetSub"></div>
           </div>
-          <div class="row-val big" id="r-urssaf" style="color:#e53935"></div>
+          <div class="net-val" id="totNetVal"></div>
         </div>
+        <div class="net-note" id="totNetNote" style="display:none"></div>
+      </div>
+      <div class="warn" id="plafondWarn" style="display:none"></div>
+      <div class="vente-tools" style="margin-top:14px">
+        <button class="tool" id="csvBtn">↓ Export CSV</button>
+        <button class="tool danger" id="resetBtn">Tout effacer</button>
       </div>
     </div>
+  </div>
 
-    <!-- Net -->
-    <div class="net-box" id="netBox">
-      <div class="net-box-row">
-        <div>
-          <div class="net-lbl" id="netLbl">Net après URSSAF + IR soldé</div>
-          <div class="net-sub" id="netSub"></div>
-        </div>
-        <div class="net-val" id="netVal"></div>
-      </div>
-      <div class="net-note" id="netNote" style="display:none"></div>
-    </div>
-
-    <!-- CA recap -->
-    <div class="ca-recap" id="caRecap"></div>
-
+  <div class="foot">
+    TVA 20 % · cotisations 25,6 % · CFP 0,1 % · VL IR 2,2 % — barèmes 2026, à revérifier chaque janvier.
   </div>
 </div>
 
 <script>
-// ── Données ───────────────────────────────────────────────────────────────────
+'use strict';
+
+// ══ Règles métier ═══════════════════════════════════════════════════════════
+// Chaque palier s'applique à la TRANCHE de CA HT cumulé, pas à tout le CA.
 const PALIERS = [
-  { seuil: 0,      label: "Départ", taux: 0.70 },
-  { seuil: 25000,  label: "25k€",   taux: 0.78 },
-  { seuil: 50000,  label: "50k€",   taux: 0.90 },
-  { seuil: 150000, label: "150k€",  taux: 1.00 },
+  { seuil: 0,      taux: 0.70, label: '0 – 25 k€'   },
+  { seuil: 25000,  taux: 0.78, label: '25 – 50 k€'  },
+  { seuil: 50000,  taux: 0.90, label: '50 – 150 k€' },
+  { seuil: 150000, taux: 1.00, label: '150 k€ +'    },
 ];
-const TVA = 0.20;
-const URSSAF = 0.256;
-const CFP = 0.001;
-const VLIR = 0.022;
+const TVA     = 0.20;
+const URSSAF  = 0.256;
+const CFP     = 0.001;
+const VLIR    = 0.022;
+const ABATT   = 0.34;      // abattement micro-BNC si pas de VL
+const PLAFOND = 77700;     // plafond micro-BNC HT
 const TRACK_MAX = 175000;
+const STORE_KEY = 'efficity-calc-v2';
+const OLD_KEY   = 'efficity-calc-v1';
 
-let vlirActive = true;
-let ventes = [];               // [{ id, ttc, ht, date }]
-const STORE_KEY = 'efficity-calc-v1';
+// ══ État ════════════════════════════════════════════════════════════════════
+var state = { report: 0, ventes: [], vlir: true, annee: new Date().getFullYear() };
+var ouvertes = new Set();
 
-// Le cumul n'est plus saisi à la main : il découle du report + des ventes validées
-function cumulHT() {
-  const report = parseFloat(q('report').value) || 0;
-  return ventes.reduce((s, v) => s + v.ht, report);
+// ══ Helpers ═════════════════════════════════════════════════════════════════
+const q = id => document.getElementById(id);
+const fmt  = n => n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+const fmt0 = n => Math.round(n).toLocaleString('fr-FR') + ' €';
+const pct  = n => (Math.round(n * 1000) / 10).toFixed(1).replace('.', ',').replace(',0', '') + ' %';
+
+function parseNum(v) {
+  if (typeof v === 'number') return v;
+  const n = parseFloat(String(v).replace(/[\s\u00a0\u202f]/g, '').replace(',', '.'));
+  return isFinite(n) && n >= 0 ? n : 0;
+}
+function dateFR(iso) {
+  const [y, m, d] = String(iso).split('-');
+  return d && m && y ? d + '/' + m + '/' + y.slice(2) : iso;
+}
+function todayISO() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function fmt(n) {
-  return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+// ══ Cœur du calcul ══════════════════════════════════════════════════════════
+
+// Découpe un montant HT en tranches de palier, en partant d'un cumul de départ.
+// C'est ici qu'une vente à cheval sur un seuil obtient deux taux.
+function decouper(cumulAvant, ht) {
+  const out = [];
+  let pos = cumulAvant, reste = ht;
+  for (let i = 0; i < PALIERS.length && reste > 0.005; i++) {
+    const haut = (i + 1 < PALIERS.length) ? PALIERS[i + 1].seuil : Infinity;
+    if (pos >= haut) continue;
+    const part = Math.min(reste, haut - pos);
+    out.push({ taux: PALIERS[i].taux, label: PALIERS[i].label, montant: part, de: pos, a: pos + part });
+    pos += part; reste -= part;
+  }
+  return out;
 }
-function pct(n) { return Math.round(n * 100) + ' %'; }
-function getPalier(cumul) {
+
+// Calcule une vente isolée, à partir du cumul HT qui la précède.
+function calcVente(ttc, cumulAvant) {
+  const ht  = ttc / (1 + TVA);
+  const tva = ttc - ht;
+  const tranches = decouper(cumulAvant, ht);
+  const retro   = tranches.reduce((s, t) => s + t.montant * t.taux, 0);
+  const effPart = ht - retro;
+  const tauxMoyen = ht > 0 ? retro / ht : PALIERS[0].taux;
+  const cotis = retro * URSSAF;
+  const cfp   = retro * CFP;
+  const vl    = state.vlir ? retro * VLIR : 0;
+  const urssaf = cotis + cfp + vl;
+  return {
+    ttc, ht, tva, tranches, retro, effPart, tauxMoyen,
+    cotis, cfp, vl, urssaf, net: retro - urssaf,
+    cumulAvant, cumulApres: cumulAvant + ht,
+  };
+}
+
+// Recalcule TOUTE l'année dans l'ordre : éditer la vente n°2 réévalue les suivantes.
+function calcAnnee() {
+  let cumul = state.report;
+  const lignes = state.ventes.map(v => {
+    const c = calcVente(v.ttc, cumul);
+    cumul = c.cumulApres;
+    return Object.assign({}, v, c);
+  });
+  const somme = k => lignes.reduce((s, l) => s + l[k], 0);
+  return {
+    lignes,
+    cumulFinal: cumul,
+    tot: {
+      ttc: somme('ttc'), tva: somme('tva'), ht: somme('ht'),
+      retro: somme('retro'), effPart: somme('effPart'),
+      cotis: somme('cotis'), cfp: somme('cfp'), vl: somme('vl'),
+      urssaf: somme('urssaf'), net: somme('net'),
+    },
+  };
+}
+
+function palierDe(cumul) {
   let p = PALIERS[0];
   for (const x of PALIERS) if (cumul >= x.seuil) p = x;
   return p;
 }
-function getNext(cumul) {
-  return PALIERS.find(p => p.seuil > cumul) || null;
-}
-function q(id) { return document.getElementById(id); }
+function palierSuivant(cumul) { return PALIERS.find(p => p.seuil > cumul) || null; }
 
-// ── Palier dots init ──────────────────────────────────────────────────────────
-function initDots() {
-  const container = q('palierDots');
-  container.innerHTML = '';
-  PALIERS.forEach((p, i) => {
-    const xPct = i === 0 ? 0 : Math.min((p.seuil / TRACK_MAX) * 100, 98);
-    const dot = document.createElement('div');
-    dot.className = 'palier-dot';
-    dot.id = 'dot-' + i;
-    dot.style.left = xPct + '%';
-    dot.innerHTML = `
-      <div class="palier-dot-inner"></div>
-      <div class="palier-dot-label">${pct(p.taux)}<br><span style="font-size:8px;color:#bbb">${p.label}</span></div>
-    `;
-    container.appendChild(dot);
+// ══ Rendu ═══════════════════════════════════════════════════════════════════
+function ligneHTML(lbl, sub, val, color, cls) {
+  return '<div class="row ' + (cls || '') + '">' +
+    '<div class="row-left"><div class="row-lbl' + (cls === 'big' ? ' big' : '') + '">' + lbl + '</div>' +
+    (sub ? '<div class="row-sub">' + sub + '</div>' : '') + '</div>' +
+    '<div class="row-val' + (cls === 'big' ? ' big' : '') + '" style="color:' + color + '">' + val + '</div></div>';
+}
+
+function detailHTML(c) {
+  let h = '';
+
+  h += '<div class="cascade">';
+  h += '<div class="cascade-title">① Honoraires</div>';
+  h += ligneHTML('Honoraires TTC', 'Encaissé du client', fmt(c.ttc), '#1a1a2e', 'big');
+  h += ligneHTML('TVA collectée (20 %)', 'À reverser à l\'État · ne t\'appartient pas', '− ' + fmt(c.tva), '#e53935', 'indent');
+  h += ligneHTML('Honoraires HT', 'Ton CA réel sur cette vente', fmt(c.ht), '#1a4a7a', 'big');
+  h += '</div>';
+
+  h += '<div class="cascade-title" style="padding-left:2px">② Rétrocession Efficity' +
+       (c.tranches.length > 1 ? '<span class="badge-split">à cheval sur ' + c.tranches.length + ' paliers</span>' : '') +
+       '</div>';
+  c.tranches.forEach((t, i) => {
+    h += '<div class="tranche' + (i % 2 ? ' t2' : '') + '">' +
+      '<div><div class="tranche-l">' + fmt(t.montant) + ' HT × ' + pct(t.taux) + '</div>' +
+      '<div class="tranche-sub">cumul ' + fmt0(t.de) + ' → ' + fmt0(t.a) + ' · palier ' + t.label + '</div></div>' +
+      '<div class="tranche-v">' + fmt(t.montant * t.taux) + '</div></div>';
+  });
+  h += '<div class="cascade" style="margin-top:8px">';
+  h += ligneHTML('Ta rétrocession', 'Taux moyen sur cette vente : ' + pct(c.tauxMoyen), fmt(c.retro), '#7c3aed', 'big');
+  h += ligneHTML('Part Efficity', 'Frais réseau', '− ' + fmt(c.effPart), '#e53935', 'indent');
+  h += '</div>';
+
+  h += '<div class="cascade" style="margin-top:8px">';
+  h += '<div class="cascade-title">③ Cotisations URSSAF</div>';
+  h += ligneHTML('Base de calcul', 'Ta rétrocession = ton CA encaissé', fmt(c.retro), '#1a1a2e');
+  h += ligneHTML('Cotisations sociales (25,6 %)', 'Maladie, retraite, CSG-CRDS', '− ' + fmt(c.cotis), '#e53935', 'indent');
+  h += ligneHTML('CFP (0,1 %)', 'Formation professionnelle', '− ' + fmt(c.cfp), '#e53935', 'indent');
+  h += state.vlir
+    ? ligneHTML('Versement libératoire IR (2,2 %)', 'IR soldé avec les cotisations', '− ' + fmt(c.vl), '#f59e0b', 'indent')
+    : ligneHTML('Versement libératoire IR', 'Désactivé · IR en déclaration annuelle', '—', '#ccc', 'indent muted');
+  h += ligneHTML('Total URSSAF', fmt(c.retro) + ' × ' + pct(URSSAF + CFP + (state.vlir ? VLIR : 0)), '− ' + fmt(c.urssaf), '#e53935', 'big');
+  h += '</div>';
+
+  h += '<div class="net-box" style="margin-top:8px">' +
+    '<div class="net-box-row"><div>' +
+    '<div class="net-lbl">' + (state.vlir ? 'Net de cette vente · IR soldé' : 'Net de cette vente · avant IR') + '</div>' +
+    '<div class="net-sub">' + fmt(c.retro) + ' − ' + fmt(c.urssaf) + '</div>' +
+    '</div><div class="net-val" style="font-size:24px">' + fmt(c.net) + '</div></div></div>';
+
+  return h;
+}
+
+function renderVentes(annee) {
+  const list = q('ventesList');
+  q('ventesCount').textContent = state.ventes.length
+    ? '(' + state.ventes.length + ')' : '';
+
+  if (!state.ventes.length) {
+    list.innerHTML = '<div class="empty">Aucune vente enregistrée.<br>Saisis un montant TTC ci-dessus pour commencer.</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  annee.lignes.forEach((c, i) => {
+    const open = ouvertes.has(c.id);
+    const el = document.createElement('div');
+    el.className = 'vente' + (open ? ' open' : '');
+
+    const head = document.createElement('div');
+    head.className = 'vente-head';
+    head.setAttribute('role', 'button');
+    head.setAttribute('tabindex', '0');
+    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+    head.innerHTML =
+      '<div class="vente-num' + (c.tranches.length > 1 ? ' split' : '') + '">' + (i + 1) + '</div>' +
+      '<div class="vente-main">' +
+        '<div class="vente-t">' + fmt(c.ttc) + ' TTC' +
+          (c.tranches.length > 1 ? '<span class="badge-split">2 taux</span>' : '') + '</div>' +
+        '<div class="vente-meta">' + dateFR(c.date) + ' · HT ' + fmt0(c.ht) +
+          ' · rétro ' + pct(c.tauxMoyen) + ' · cumul → ' + fmt0(c.cumulApres) + '</div>' +
+      '</div>' +
+      '<div class="vente-net">' + fmt0(c.net) + '</div>' +
+      '<div class="vente-chev">▼</div>';
+    const toggle = () => { ouvertes.has(c.id) ? ouvertes.delete(c.id) : ouvertes.add(c.id); render(); };
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    el.appendChild(head);
+
+    if (open) {
+      const body = document.createElement('div');
+      body.className = 'vente-body';
+      body.innerHTML =
+        '<div class="edit-grid">' +
+          '<div class="edit-field"><label class="edit-lbl" for="ttc-' + c.id + '">Montant TTC</label>' +
+            '<input class="edit-in" id="ttc-' + c.id + '" type="text" inputmode="decimal" data-focuskey="ttc-' + c.id + '" value="' + (Math.round(c.ttc * 100) / 100) + '" /></div>' +
+          '<div class="edit-field date"><label class="edit-lbl" for="dt-' + c.id + '">Date</label>' +
+            '<input class="edit-in" id="dt-' + c.id + '" type="date" data-focuskey="dt-' + c.id + '" value="' + c.date + '" /></div>' +
+        '</div>' +
+        detailHTML(c) +
+        '<div class="vente-tools">' +
+          '<button class="tool" data-up="' + c.id + '"' + (i === 0 ? ' disabled' : '') + '>↑ Monter</button>' +
+          '<button class="tool" data-down="' + c.id + '"' + (i === annee.lignes.length - 1 ? ' disabled' : '') + '>↓ Descendre</button>' +
+          '<button class="tool danger" data-del="' + c.id + '">Supprimer</button>' +
+        '</div>';
+      el.appendChild(body);
+
+      body.querySelector('#ttc-' + c.id).addEventListener('input', e => {
+        const v = state.ventes.find(x => x.id === c.id);
+        v.ttc = parseNum(e.target.value);
+        save(); render();
+      });
+      body.querySelector('#dt-' + c.id).addEventListener('change', e => {
+        const v = state.ventes.find(x => x.id === c.id);
+        v.date = e.target.value || todayISO();
+        save(); render();
+      });
+      body.querySelector('[data-del]').addEventListener('click', () => {
+        if (!confirm('Supprimer la vente de ' + fmt(c.ttc) + ' TTC ?')) return;
+        state.ventes = state.ventes.filter(x => x.id !== c.id);
+        ouvertes.delete(c.id);
+        save(); render();
+        flash('Vente supprimée · cumul ' + fmt0(calcAnnee().cumulFinal));
+      });
+      body.querySelector('[data-up]').addEventListener('click', () => deplacer(c.id, -1));
+      body.querySelector('[data-down]').addEventListener('click', () => deplacer(c.id, 1));
+    }
+
+    list.appendChild(el);
   });
 }
 
-// ── Update ────────────────────────────────────────────────────────────────────
-function update() {
-  const ttc   = parseFloat(q('ttc').value) || 0;
-  const cumul = cumulHT();
+function deplacer(id, dir) {
+  const i = state.ventes.findIndex(v => v.id === id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= state.ventes.length) return;
+  const [v] = state.ventes.splice(i, 1);
+  state.ventes.splice(j, 0, v);
+  save(); render();
+}
 
-  const ht   = ttc / (1 + TVA);
-  const tva  = ttc - ht;
+function renderPalier(annee) {
+  const cumul = annee.cumulFinal;
+  const p = palierDe(cumul);
+  const next = palierSuivant(cumul);
 
-  const palier = getPalier(cumul);
-  const next   = getNext(cumul);
-  const retro  = ht * palier.taux;
-  const effPart = ht * (1 - palier.taux);
-  const manque = next ? Math.max(0, next.seuil - cumul) : 0;
-
-  const cotis  = retro * URSSAF;
-  const cfp    = retro * CFP;
-  const vlMnt  = vlirActive ? retro * VLIR : 0;
-  const totalU = cotis + cfp + vlMnt;
-  const totalTaux = URSSAF + CFP + (vlirActive ? VLIR : 0);
-
-  const net = retro - totalU;
-  const caApres = cumul + ht;
-
-  // Bloc cumul
-  q('cumulVal').textContent = fmt(cumul);
-  q('cumulCount').textContent = ventes.length
-    ? '(' + ventes.length + ' vente' + (ventes.length > 1 ? 's' : '') + ')'
-    : '';
-
-  // Palier bar
-  const fillPct = Math.min((cumul / TRACK_MAX) * 100, 100);
-  q('palierFill').style.width = fillPct + '%';
-  PALIERS.forEach((p, i) => {
+  q('palierCumul').textContent = fmt(cumul);
+  q('palierTaux').textContent = 'tranche en cours à ' + pct(p.taux);
+  q('palierFill').style.width = Math.min((cumul / TRACK_MAX) * 100, 100) + '%';
+  PALIERS.forEach((x, i) => {
     const dot = q('dot-' + i);
-    if (dot) dot.className = 'palier-dot' + (cumul >= p.seuil ? ' active' : '');
+    if (dot) dot.className = 'palier-dot' + (cumul >= x.seuil ? ' active' : '');
   });
+  q('palierNext').innerHTML = next
+    ? '📈 Il manque <strong>' + fmt0(next.seuil - cumul) + ' HT</strong> pour que la tranche suivante passe à ' + pct(next.taux) +
+      '.<br>Une vente qui franchit ce seuil est découpée : ' + pct(p.taux) + ' jusqu\'à ' + fmt0(next.seuil) + ', puis ' + pct(next.taux) + '.'
+    : '🎯 Palier maximum atteint : 100 % des honoraires HT te sont reversés.';
+}
 
-  // Honoraires
-  q('r-ttc').textContent = fmt(ttc);
-  q('r-tva').textContent = '− ' + fmt(tva);
-  q('r-ht').textContent  = fmt(ht);
+function renderTotaux(annee) {
+  const t = annee.tot;
+  let h = '';
+  h += ligneHTML('Honoraires TTC encaissés', state.ventes.length + ' vente' + (state.ventes.length > 1 ? 's' : ''), fmt(t.ttc), '#1a1a2e', 'big');
+  h += ligneHTML('TVA collectée', 'À reverser à l\'État', '− ' + fmt(t.tva), '#e53935', 'indent');
+  h += ligneHTML('CA HT de l\'année', state.report > 0 ? 'Hors report de ' + fmt0(state.report) : 'Base des paliers', fmt(t.ht), '#1a4a7a', 'big');
+  h += ligneHTML('Rétrocessions', t.ht > 0 ? 'Taux moyen annuel ' + pct(t.retro / t.ht) : '—', fmt(t.retro), '#7c3aed', 'big');
+  h += ligneHTML('Part Efficity', 'Frais réseau', '− ' + fmt(t.effPart), '#e53935', 'indent');
+  h += ligneHTML('Total URSSAF', 'Cotisations + CFP' + (state.vlir ? ' + VL IR' : ''), '− ' + fmt(t.urssaf), '#e53935', 'big');
+  q('totaux').innerHTML = h;
 
-  // Rétrocession
-  q('r-retro-lbl').textContent = 'Ta rétrocession (' + pct(palier.taux) + ')';
-  q('r-retro-sub').textContent = 'Efficity te reverse ' + pct(palier.taux) + ' des honoraires HT · palier ' + palier.label;
-  q('r-retro').textContent     = fmt(retro);
-  q('r-efficity-lbl').textContent = 'Part Efficity (' + pct(1 - palier.taux) + ')';
-  q('r-efficity').textContent  = '− ' + fmt(effPart);
+  q('totNetLbl').textContent = state.vlir ? 'Net cumulé · IR soldé' : 'Net cumulé · avant IR';
+  q('totNetSub').textContent = fmt(t.retro) + ' − ' + fmt(t.urssaf);
+  q('totNetVal').textContent = fmt0(t.net);
 
-  const nextBox = q('palierNextBox');
-  if (next) {
-    nextBox.style.display = 'block';
-    nextBox.textContent = '📈 Il manque ' + fmt(manque).replace(' €','') + ' € HT pour passer à ' + pct(next.taux) + ' (' + next.label + ')';
-  } else {
-    nextBox.style.display = 'none';
-  }
-
-  // URSSAF
-  q('r-base').textContent  = fmt(retro);
-  q('r-cot').textContent   = '− ' + fmt(cotis);
-  q('r-cfp').textContent   = '− ' + fmt(cfp);
-  const vlRow = q('vlRow');
-  if (vlirActive) {
-    vlRow.classList.remove('muted');
-    q('r-vl').textContent = '− ' + fmt(vlMnt);
-    q('r-vl').style.color = '#f59e0b';
-  } else {
-    vlRow.classList.add('muted');
-    q('r-vl').textContent = '—';
-    q('r-vl').style.color = '#ccc';
-  }
-  q('r-urssaf-sub').textContent = fmt(retro) + ' × ' + (Math.round(totalTaux * 1000) / 10).toFixed(1).replace('.',',') + ' %';
-  q('r-urssaf').textContent = '− ' + fmt(totalU);
-
-  // Net
-  if (ttc <= 0) {
-    q('netLbl').textContent = 'Aucune vente en cours';
-    q('netSub').textContent = '↑ Saisis un montant TTC pour lancer le calcul';
-  } else {
-    q('netLbl').textContent = vlirActive ? 'Net après URSSAF + IR soldé' : 'Net avant IR · après URSSAF';
-    q('netSub').textContent = fmt(retro) + ' − ' + fmt(totalU);
-  }
-  q('netVal').textContent = fmt(net);
-
-  const note = q('netNote');
-  if (!vlirActive) {
+  const note = q('totNetNote');
+  if (!state.vlir && t.retro > 0) {
     note.style.display = 'block';
-    const base = retro * 0.66;
-    note.textContent = 'IR à régler via déclaration annuelle · base imposable micro-BNC : ' + fmt(base) + ' (abattement 34 %)';
+    note.textContent = 'IR à régler en déclaration annuelle · base imposable micro-BNC : ' +
+      fmt(t.retro * (1 - ABATT)) + ' (abattement 34 %)';
   } else {
     note.style.display = 'none';
   }
 
-  // Recap CA
-  q('caRecap').innerHTML = 'CA HT cumulé après cette vente : <strong>' + fmt(caApres) + '</strong>' +
-    (next ? ' · prochain palier à ' + fmt(next.seuil) : ' · palier maximum 🎯');
-
-  // Pulse animation
-  const card = q('netVal');
-  card.classList.remove('pulse');
-  void card.offsetWidth;
-  card.classList.add('pulse');
+  const w = q('plafondWarn');
+  const cumul = annee.cumulFinal;
+  if (cumul > PLAFOND) {
+    w.style.display = 'block';
+    w.innerHTML = '⚠️ Plafond micro-BNC dépassé : ' + fmt0(cumul) + ' > ' + fmt0(PLAFOND) +
+      ' HT. Le régime micro et le versement libératoire ne tiennent plus au-delà de 2 années consécutives.';
+  } else if (cumul > PLAFOND * 0.85) {
+    w.style.display = 'block';
+    w.innerHTML = '⚠️ Tu approches du plafond micro-BNC : ' + fmt0(cumul) + ' / ' + fmt0(PLAFOND) + ' HT.';
+  } else {
+    w.style.display = 'none';
+  }
 }
 
-function toggleVL() {
-  vlirActive = !vlirActive;
-  const btn = q('vlToggle');
-  btn.classList.toggle('on', vlirActive);
-  btn.setAttribute('aria-pressed', vlirActive);
-  update();
-  save();
+// Re-rendu complet à chaque frappe : on restaure le focus et le curseur.
+function render() {
+  const act = document.activeElement;
+  const key = act && act.dataset ? act.dataset.focuskey : null;
+  let pos = null;
+  try { pos = key ? act.selectionStart : null; } catch (e) {}
+
+  const annee = calcAnnee();
+  renderPalier(annee);
+  renderVentes(annee);
+  renderTotaux(annee);
+
+  if (key) {
+    const el = document.querySelector('[data-focuskey="' + key + '"]');
+    if (el) { el.focus(); try { if (pos !== null) el.setSelectionRange(pos, pos); } catch (e) {} }
+  }
 }
 
-// ── Liste des ventes ──────────────────────────────────────────────────────────
-function renderVentes() {
-  const section = q('ventesSection');
-  const list = q('ventesList');
-  const report = parseFloat(q('report').value) || 0;
-
-  if (ventes.length === 0 && report <= 0) {
-    section.style.display = 'none';
-    return;
-  }
-  section.style.display = 'block';
-  q('ventesTitle').textContent = 'Détail du cumul';
-
-  list.innerHTML = '';
-
-  // Ligne de report (non supprimable, éditable via le champ plus haut)
-  if (report > 0) {
-    const row = document.createElement('div');
-    row.className = 'vente';
-    row.innerHTML =
-      '<div class="vente-num report">R</div>' +
-      '<div class="vente-main">' +
-        '<div class="vente-ht">' + fmt(report) + '</div>' +
-        '<div class="vente-meta">Report initial · modifiable ci-dessus</div>' +
-      '</div>';
-    list.appendChild(row);
-  }
-
-  if (ventes.length === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'ventes-empty';
-    empty.textContent = 'Aucune vente validée pour le moment';
-    list.appendChild(empty);
-    return;
-  }
-
-  ventes.forEach((v, i) => {
-    const row = document.createElement('div');
-    row.className = 'vente';
-
-    const num = document.createElement('div');
-    num.className = 'vente-num';
-    num.textContent = i + 1;
-
-    const main = document.createElement('div');
-    main.className = 'vente-main';
-    main.innerHTML =
-      '<div class="vente-ht">' + fmt(v.ht) + ' HT</div>' +
-      '<div class="vente-meta">' + v.date + ' · ' + fmt(v.ttc) + ' TTC</div>';
-
-    // Champ d'édition : on édite le TTC, le HT se recalcule
-    const edit = document.createElement('input');
-    edit.type = 'number';
-    edit.className = 'vente-edit';
-    edit.value = Math.round(v.ttc * 100) / 100;
-    edit.step = '100';
-    edit.min = '0';
-    edit.setAttribute('inputmode', 'decimal');
-    edit.title = 'Modifier le montant TTC de cette vente';
-    edit.addEventListener('input', () => {
-      const n = parseFloat(edit.value);
-      if (isNaN(n) || n < 0) return;
-      v.ttc = n;
-      v.ht = n / (1 + TVA);
-      main.querySelector('.vente-ht').textContent = fmt(v.ht) + ' HT';
-      main.querySelector('.vente-meta').textContent = v.date + ' · ' + fmt(v.ttc) + ' TTC';
-      update();
-      save();
-    });
-
-    const del = document.createElement('button');
-    del.className = 'vente-del';
-    del.innerHTML = '✕';
-    del.title = 'Supprimer cette vente';
-    del.addEventListener('click', () => {
-      if (!confirm('Supprimer cette vente de ' + fmt(v.ttc) + ' TTC ?')) return;
-      ventes = ventes.filter(x => x.id !== v.id);
-      renderVentes();
-      update();
-      save();
-      flag('Vente supprimée · cumul : ' + fmt(cumulHT()));
-    });
-
-    row.appendChild(num);
-    row.appendChild(main);
-    row.appendChild(edit);
-    row.appendChild(del);
-    list.appendChild(row);
+function initDots() {
+  const c = q('palierDots');
+  c.innerHTML = '';
+  PALIERS.forEach((p, i) => {
+    const x = i === 0 ? 0 : Math.min((p.seuil / TRACK_MAX) * 100, 98);
+    const d = document.createElement('div');
+    d.className = 'palier-dot';
+    d.id = 'dot-' + i;
+    d.style.left = x + '%';
+    d.innerHTML = '<div class="palier-dot-inner"></div>' +
+      '<div class="palier-dot-label">' + pct(p.taux) + '<br><span style="font-size:8px;color:#bbb">' +
+      (i === 0 ? 'départ' : fmt0(p.seuil).replace(' €', '')) + '</span></div>';
+    c.appendChild(d);
   });
 }
 
-// ── Persistance (localStorage) ────────────────────────────────────────────────
+// ══ Actions ═════════════════════════════════════════════════════════════════
+function ajouterVente() {
+  const ttc = parseNum(q('newTtc').value);
+  if (ttc <= 0) { flash('Saisis d\'abord un montant TTC'); return; }
+  const v = { id: Date.now(), ttc: ttc, date: todayISO() };
+  state.ventes.push(v);
+  q('newTtc').value = '';
+  ouvertes.add(v.id);
+  save(); render();
+  const c = calcAnnee().lignes.find(l => l.id === v.id);
+  flash('Vente ajoutée · net ' + fmt0(c.net) + ' · cumul ' + fmt0(c.cumulApres));
+}
+
+let flashTimer;
+function flash(msg) {
+  const el = q('flash');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function exportCSV() {
+  const a = calcAnnee();
+  if (!a.lignes.length) { flash('Rien à exporter'); return; }
+  const sep = ';';
+  const num = n => (Math.round(n * 100) / 100).toFixed(2).replace('.', ',');
+  const head = ['N°','Date','TTC','TVA','HT','Cumul avant','Cumul apres','Detail paliers','Retrocession','Taux moyen','Part Efficity','Cotisations','CFP','VL IR','Total URSSAF','Net'];
+  const rows = a.lignes.map((l, i) => [
+    i + 1, dateFR(l.date), num(l.ttc), num(l.tva), num(l.ht), num(l.cumulAvant), num(l.cumulApres),
+    l.tranches.map(t => num(t.montant) + ' @ ' + pct(t.taux)).join(' + '),
+    num(l.retro), pct(l.tauxMoyen), num(l.effPart), num(l.cotis), num(l.cfp), num(l.vl), num(l.urssaf), num(l.net),
+  ]);
+  const csv = '\uFEFF' + [head, ...rows].map(r => r.join(sep)).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'ventes-efficity-' + state.annee + '.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+  flash('CSV exporté · ' + a.lignes.length + ' ligne(s)');
+}
+
+function resetTout() {
+  if (!confirm('Effacer le report et les ' + state.ventes.length + ' vente(s) ?')) return;
+  state = { report: 0, ventes: [], vlir: state.vlir, annee: new Date().getFullYear() };
+  ouvertes.clear();
+  q('report').value = '';
+  save(); render();
+  flash('Année remise à zéro');
+}
+
+// ══ Persistance ═════════════════════════════════════════════════════════════
 function save() {
-  try {
-    localStorage.setItem(STORE_KEY, JSON.stringify({
-      report: parseFloat(q('report').value) || 0,
-      ventes: ventes,
-      ttc: parseFloat(q('ttc').value) || 0,
-      vlir: vlirActive,
-      annee: new Date().getFullYear(),
-    }));
-  } catch (e) { /* mode privé Safari : on ignore */ }
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* Safari privé */ }
 }
 
 function load() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return;
-    const d = JSON.parse(raw);
-
-    // Nouvelle année civile → tout repart à zéro
-    if (d.annee && d.annee !== new Date().getFullYear()) {
-      q('report').value = 0;
-      ventes = [];
-      flag('Nouvelle année : cumul remis à zéro');
-    } else {
-      // Migration depuis l'ancienne version : le cumul saisi devient le report
-      if (typeof d.report === 'number') q('report').value = d.report;
-      else if (typeof d.cumul === 'number') q('report').value = d.cumul;
-
-      if (Array.isArray(d.ventes)) {
-        ventes = d.ventes.filter(v =>
-          v && typeof v.ttc === 'number' && typeof v.ht === 'number'
-        );
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch (e) {}
+  if (!d) {
+    // Migration depuis la v1 : ventes {ttc, ht, date "jj/mm/aa"} + report/cumul
+    try {
+      const o = JSON.parse(localStorage.getItem(OLD_KEY) || 'null');
+      if (o) {
+        d = {
+          report: typeof o.report === 'number' ? o.report : (typeof o.cumul === 'number' ? o.cumul : 0),
+          ventes: (Array.isArray(o.ventes) ? o.ventes : []).map(v => ({
+            id: v.id || Date.now() + Math.random(),
+            ttc: Number(v.ttc) || 0,
+            date: /^\d{2}\/\d{2}\/\d{2}$/.test(v.date || '')
+              ? '20' + v.date.slice(6, 8) + '-' + v.date.slice(3, 5) + '-' + v.date.slice(0, 2)
+              : todayISO(),
+          })),
+          vlir: typeof o.vlir === 'boolean' ? o.vlir : true,
+          annee: o.annee || new Date().getFullYear(),
+        };
       }
-    }
+    } catch (e) {}
+  }
+  if (!d) return;
 
-    // On ne restaure le TTC que s'il est réel : sinon l'app rouvrait sur des zéros
-    if (typeof d.ttc === 'number' && d.ttc > 0) q('ttc').value = d.ttc;
-    if (typeof d.vlir === 'boolean') {
-      vlirActive = d.vlir;
-      q('vlToggle').classList.toggle('on', vlirActive);
-      q('vlToggle').setAttribute('aria-pressed', vlirActive);
-    }
-  } catch (e) { /* données corrompues : on repart des valeurs par défaut */ }
+  const now = new Date().getFullYear();
+  if (d.annee && d.annee !== now) {
+    state = { report: 0, ventes: [], vlir: d.vlir !== false, annee: now };
+    flash('Nouvelle année : cumul et ventes remis à zéro');
+    save();
+    return;
+  }
+  state.report = Number(d.report) || 0;
+  state.vlir = d.vlir !== false;
+  state.annee = d.annee || now;
+  state.ventes = (Array.isArray(d.ventes) ? d.ventes : [])
+    .filter(v => v && typeof v.ttc === 'number' && isFinite(v.ttc))
+    .map(v => ({ id: v.id || Date.now() + Math.random(), ttc: v.ttc, date: v.date || todayISO() }));
 }
 
-let flagTimer;
-function flag(msg) {
-  const el = q('savedFlag');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(flagTimer);
-  flagTimer = setTimeout(() => el.classList.remove('show'), 2600);
-}
-
-// ── Valider une vente : ajoute le HT au cumul ─────────────────────────────────
-function validerVente() {
-  const ttc = parseFloat(q('ttc').value) || 0;
-  if (ttc <= 0) { flag('Saisis d\'abord un montant TTC'); return; }
-
-  ventes.push({
-    id: Date.now(),
-    ttc: ttc,
-    ht: ttc / (1 + TVA),
-    date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }),
-  });
-
-  q('ttc').value = '';
-  renderVentes();
-  update();
-  save();
-  flag('✓ Vente enregistrée · cumul : ' + fmt(cumulHT()));
-}
-
-// ── Reset annuel ──────────────────────────────────────────────────────────────
-function resetAnnee() {
-  if (!confirm('Effacer le report et les ' + ventes.length + ' vente(s) enregistrée(s) ?')) return;
-  q('report').value = 0;
-  ventes = [];
-  renderVentes();
-  update();
-  save();
-  flag('Cumul remis à zéro');
-}
-
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ══ Init ════════════════════════════════════════════════════════════════════
 initDots();
 load();
-renderVentes();
-update();
+q('anneeBadge').textContent = state.annee;
+if (state.report > 0) q('report').value = state.report;
+q('vlToggle').classList.toggle('on', state.vlir);
+q('vlToggle').setAttribute('aria-pressed', String(state.vlir));
+render();
 
-q('ttc').addEventListener('input', () => { update(); save(); });
-q('report').addEventListener('input', () => { renderVentes(); update(); save(); });
+q('report').addEventListener('input', e => { state.report = parseNum(e.target.value); save(); render(); });
+q('newTtc').addEventListener('keydown', e => { if (e.key === 'Enter') ajouterVente(); });
+q('addBtn').addEventListener('click', ajouterVente);
+q('csvBtn').addEventListener('click', exportCSV);
+q('resetBtn').addEventListener('click', resetTout);
+q('vlToggle').addEventListener('click', () => {
+  state.vlir = !state.vlir;
+  q('vlToggle').classList.toggle('on', state.vlir);
+  q('vlToggle').setAttribute('aria-pressed', String(state.vlir));
+  save(); render();
+});
 
-// ── Service Worker ────────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 </script>
 </body>
 </html>
