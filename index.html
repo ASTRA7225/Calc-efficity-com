@@ -183,6 +183,27 @@
     }
     .toggle.on .toggle-knob { transform: translateX(21px); }
 
+    /* ── Boutons d'action ── */
+    .actions { display: flex; gap: 8px; padding: 10px 0 14px; }
+    .btn {
+      flex: 1; border: none; border-radius: 10px; cursor: pointer;
+      padding: 12px 10px; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600; transition: transform 0.12s, opacity 0.2s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-ghost {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--border); flex: 0 0 auto; padding: 12px 14px;
+    }
+    .saved-flag {
+      font-size: 10px; font-family: 'DM Mono', monospace;
+      color: var(--green-text); background: var(--green-bg);
+      border-radius: 6px; padding: 6px 10px; margin-bottom: 10px;
+      opacity: 0; transition: opacity 0.3s; text-align: center;
+    }
+    .saved-flag.show { opacity: 1; }
+
     /* ── Palier bar ── */
     .palier-wrap { margin-bottom: 18px; }
     .palier-label { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
@@ -316,6 +337,16 @@
               <div class="toggle-knob"></div>
             </button>
           </div>
+
+          <div class="saved-flag" id="savedFlag"></div>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="validerVente()">
+              ✓ Valider cette vente
+            </button>
+            <button class="btn btn-ghost" onclick="resetAnnee()" title="Remettre le cumul à zéro">
+              ↺
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -434,6 +465,7 @@ const VLIR = 0.022;
 const TRACK_MAX = 175000;
 
 let vlirActive = true;
+const STORE_KEY = 'efficity-calc-v1';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function fmt(n) {
@@ -567,14 +599,85 @@ function toggleVL() {
   btn.classList.toggle('on', vlirActive);
   btn.setAttribute('aria-pressed', vlirActive);
   update();
+  save();
+}
+
+// ── Persistance (localStorage) ────────────────────────────────────────────────
+function save() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      cumul: parseFloat(q('cumul').value) || 0,
+      ttc: parseFloat(q('ttc').value) || 0,
+      vlir: vlirActive,
+      annee: new Date().getFullYear(),
+    }));
+  } catch (e) { /* mode privé Safari : on ignore */ }
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+
+    // Nouvelle année civile → le cumul repart à zéro
+    if (d.annee && d.annee !== new Date().getFullYear()) {
+      q('cumul').value = 0;
+      flag('Nouvelle année : cumul remis à zéro');
+    } else if (typeof d.cumul === 'number') {
+      q('cumul').value = d.cumul;
+    }
+
+    if (typeof d.ttc === 'number') q('ttc').value = d.ttc;
+    if (typeof d.vlir === 'boolean') {
+      vlirActive = d.vlir;
+      q('vlToggle').classList.toggle('on', vlirActive);
+      q('vlToggle').setAttribute('aria-pressed', vlirActive);
+    }
+  } catch (e) { /* données corrompues : on repart des valeurs par défaut */ }
+}
+
+let flagTimer;
+function flag(msg) {
+  const el = q('savedFlag');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(flagTimer);
+  flagTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+// ── Valider une vente : ajoute le HT au cumul ─────────────────────────────────
+function validerVente() {
+  const ttc = parseFloat(q('ttc').value) || 0;
+  if (ttc <= 0) { flag('Saisis d\'abord un montant TTC'); return; }
+
+  const ht = ttc / (1 + TVA);
+  const cumul = parseFloat(q('cumul').value) || 0;
+  const nouveau = cumul + ht;
+
+  q('cumul').value = Math.round(nouveau * 100) / 100;
+  q('ttc').value = '';
+  update();
+  save();
+  flag('✓ Vente enregistrée · cumul : ' + fmt(nouveau));
+}
+
+// ── Reset annuel ──────────────────────────────────────────────────────────────
+function resetAnnee() {
+  if (!confirm('Remettre le CA cumulé à zéro ?')) return;
+  q('cumul').value = 0;
+  update();
+  save();
+  flag('Cumul remis à zéro');
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 initDots();
+load();
 update();
 
-q('ttc').addEventListener('input', update);
-q('cumul').addEventListener('input', update);
+q('ttc').addEventListener('input', () => { update(); save(); });
+q('cumul').addEventListener('input', () => { update(); save(); });
 
 // ── Service Worker ────────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
