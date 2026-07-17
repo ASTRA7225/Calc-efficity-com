@@ -1,4 +1,4 @@
-const CACHE = 'efficity-v2';
+const CACHE = 'efficity-v3';
 const FILES = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {

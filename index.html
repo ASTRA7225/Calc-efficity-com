@@ -569,8 +569,13 @@ function update() {
   q('r-urssaf').textContent = '− ' + fmt(totalU);
 
   // Net
-  q('netLbl').textContent = vlirActive ? 'Net après URSSAF + IR soldé' : 'Net avant IR · après URSSAF';
-  q('netSub').textContent = fmt(retro) + ' − ' + fmt(totalU);
+  if (ttc <= 0) {
+    q('netLbl').textContent = 'Aucune vente en cours';
+    q('netSub').textContent = '↑ Saisis un montant TTC pour lancer le calcul';
+  } else {
+    q('netLbl').textContent = vlirActive ? 'Net après URSSAF + IR soldé' : 'Net avant IR · après URSSAF';
+    q('netSub').textContent = fmt(retro) + ' − ' + fmt(totalU);
+  }
   q('netVal').textContent = fmt(net);
 
   const note = q('netNote');
@@ -628,7 +633,8 @@ function load() {
       q('cumul').value = d.cumul;
     }
 
-    if (typeof d.ttc === 'number') q('ttc').value = d.ttc;
+    // On ne restaure le TTC que s'il est réel : sinon l'app rouvrait sur des zéros
+    if (typeof d.ttc === 'number' && d.ttc > 0) q('ttc').value = d.ttc;
     if (typeof d.vlir === 'boolean') {
       vlirActive = d.vlir;
       q('vlToggle').classList.toggle('on', vlirActive);
