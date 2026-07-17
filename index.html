@@ -183,6 +183,56 @@
     }
     .toggle.on .toggle-knob { transform: translateX(21px); }
 
+    /* ── Bloc cumul calculé ── */
+    .cumul-box {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 12px; padding: 10px 12px;
+      background: #eef4fb; border-radius: 10px;
+      border-left: 3px solid var(--blue);
+    }
+    .cumul-lbl { font-size: 11px; color: var(--blue); font-family: 'DM Mono', monospace; }
+    .cumul-val {
+      font-size: 17px; font-weight: 800; color: var(--blue);
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── Liste des ventes ── */
+    .vente {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+    }
+    .vente:last-child { border-bottom: none; }
+    .vente-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      font-size: 10px; font-family: 'DM Mono', monospace;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-weight: 600;
+    }
+    .vente-num.report { background: #9aa8b8; }
+    .vente-main { flex: 1; min-width: 0; }
+    .vente-ht {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      font-family: 'Playfair Display', serif;
+    }
+    .vente-meta { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 1px; }
+    .vente-edit {
+      width: 92px; border: 1px solid var(--border); border-radius: 7px;
+      padding: 6px 8px; font-size: 12px; font-family: 'DM Mono', monospace;
+      color: var(--text); outline: none; text-align: right;
+    }
+    .vente-edit:focus { border-color: var(--blue2); }
+    .vente-del {
+      background: none; border: none; cursor: pointer;
+      color: #c9c9c9; font-size: 17px; line-height: 1;
+      padding: 4px 2px; flex-shrink: 0; transition: color 0.15s;
+    }
+    .vente-del:hover, .vente-del:active { color: var(--red); }
+    .ventes-empty {
+      font-size: 11px; color: var(--muted);
+      font-family: 'DM Mono', monospace; padding: 10px 0; text-align: center;
+    }
+
     /* ── Boutons d'action ── */
     .actions { display: flex; gap: 8px; padding: 10px 0 14px; }
     .btn {
@@ -322,10 +372,15 @@
             <span class="input-suffix">€ TTC</span>
           </div>
 
-          <label class="input-label">CA HT cumulé cette année (avant cette vente)</label>
+          <label class="input-label">Report : CA HT déjà réalisé avant d'utiliser l'app</label>
           <div class="input-wrap" style="margin-bottom:0">
-            <input type="number" id="cumul" value="0" min="0" step="100" inputmode="decimal" />
+            <input type="number" id="report" value="0" min="0" step="100" inputmode="decimal" />
             <span class="input-suffix">€ HT</span>
+          </div>
+
+          <div class="cumul-box">
+            <span class="cumul-lbl">CA HT cumulé <span id="cumulCount"></span></span>
+            <span class="cumul-val" id="cumulVal"></span>
           </div>
 
           <div class="toggle-row">
@@ -348,6 +403,14 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Ventes enregistrées -->
+    <div class="section" id="ventesSection" style="display:none">
+      <div class="section-title"><span></span><span id="ventesTitle" style="flex:0 0 auto"></span><span></span></div>
+      <div class="section-inner" style="padding: 6px 14px 10px">
+        <div id="ventesList"></div>
       </div>
     </div>
 
@@ -465,7 +528,14 @@ const VLIR = 0.022;
 const TRACK_MAX = 175000;
 
 let vlirActive = true;
+let ventes = [];               // [{ id, ttc, ht, date }]
 const STORE_KEY = 'efficity-calc-v1';
+
+// Le cumul n'est plus saisi à la main : il découle du report + des ventes validées
+function cumulHT() {
+  const report = parseFloat(q('report').value) || 0;
+  return ventes.reduce((s, v) => s + v.ht, report);
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function fmt(n) {
@@ -502,8 +572,8 @@ function initDots() {
 
 // ── Update ────────────────────────────────────────────────────────────────────
 function update() {
-  const ttc   = parseFloat(q('ttc').value)   || 0;
-  const cumul = parseFloat(q('cumul').value) || 0;
+  const ttc   = parseFloat(q('ttc').value) || 0;
+  const cumul = cumulHT();
 
   const ht   = ttc / (1 + TVA);
   const tva  = ttc - ht;
@@ -522,6 +592,12 @@ function update() {
 
   const net = retro - totalU;
   const caApres = cumul + ht;
+
+  // Bloc cumul
+  q('cumulVal').textContent = fmt(cumul);
+  q('cumulCount').textContent = ventes.length
+    ? '(' + ventes.length + ' vente' + (ventes.length > 1 ? 's' : '') + ')'
+    : '';
 
   // Palier bar
   const fillPct = Math.min((cumul / TRACK_MAX) * 100, 100);
@@ -607,11 +683,103 @@ function toggleVL() {
   save();
 }
 
+// ── Liste des ventes ──────────────────────────────────────────────────────────
+function renderVentes() {
+  const section = q('ventesSection');
+  const list = q('ventesList');
+  const report = parseFloat(q('report').value) || 0;
+
+  if (ventes.length === 0 && report <= 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+  q('ventesTitle').textContent = 'Détail du cumul';
+
+  list.innerHTML = '';
+
+  // Ligne de report (non supprimable, éditable via le champ plus haut)
+  if (report > 0) {
+    const row = document.createElement('div');
+    row.className = 'vente';
+    row.innerHTML =
+      '<div class="vente-num report">R</div>' +
+      '<div class="vente-main">' +
+        '<div class="vente-ht">' + fmt(report) + '</div>' +
+        '<div class="vente-meta">Report initial · modifiable ci-dessus</div>' +
+      '</div>';
+    list.appendChild(row);
+  }
+
+  if (ventes.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'ventes-empty';
+    empty.textContent = 'Aucune vente validée pour le moment';
+    list.appendChild(empty);
+    return;
+  }
+
+  ventes.forEach((v, i) => {
+    const row = document.createElement('div');
+    row.className = 'vente';
+
+    const num = document.createElement('div');
+    num.className = 'vente-num';
+    num.textContent = i + 1;
+
+    const main = document.createElement('div');
+    main.className = 'vente-main';
+    main.innerHTML =
+      '<div class="vente-ht">' + fmt(v.ht) + ' HT</div>' +
+      '<div class="vente-meta">' + v.date + ' · ' + fmt(v.ttc) + ' TTC</div>';
+
+    // Champ d'édition : on édite le TTC, le HT se recalcule
+    const edit = document.createElement('input');
+    edit.type = 'number';
+    edit.className = 'vente-edit';
+    edit.value = Math.round(v.ttc * 100) / 100;
+    edit.step = '100';
+    edit.min = '0';
+    edit.setAttribute('inputmode', 'decimal');
+    edit.title = 'Modifier le montant TTC de cette vente';
+    edit.addEventListener('input', () => {
+      const n = parseFloat(edit.value);
+      if (isNaN(n) || n < 0) return;
+      v.ttc = n;
+      v.ht = n / (1 + TVA);
+      main.querySelector('.vente-ht').textContent = fmt(v.ht) + ' HT';
+      main.querySelector('.vente-meta').textContent = v.date + ' · ' + fmt(v.ttc) + ' TTC';
+      update();
+      save();
+    });
+
+    const del = document.createElement('button');
+    del.className = 'vente-del';
+    del.innerHTML = '✕';
+    del.title = 'Supprimer cette vente';
+    del.addEventListener('click', () => {
+      if (!confirm('Supprimer cette vente de ' + fmt(v.ttc) + ' TTC ?')) return;
+      ventes = ventes.filter(x => x.id !== v.id);
+      renderVentes();
+      update();
+      save();
+      flag('Vente supprimée · cumul : ' + fmt(cumulHT()));
+    });
+
+    row.appendChild(num);
+    row.appendChild(main);
+    row.appendChild(edit);
+    row.appendChild(del);
+    list.appendChild(row);
+  });
+}
+
 // ── Persistance (localStorage) ────────────────────────────────────────────────
 function save() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify({
-      cumul: parseFloat(q('cumul').value) || 0,
+      report: parseFloat(q('report').value) || 0,
+      ventes: ventes,
       ttc: parseFloat(q('ttc').value) || 0,
       vlir: vlirActive,
       annee: new Date().getFullYear(),
@@ -625,12 +793,21 @@ function load() {
     if (!raw) return;
     const d = JSON.parse(raw);
 
-    // Nouvelle année civile → le cumul repart à zéro
+    // Nouvelle année civile → tout repart à zéro
     if (d.annee && d.annee !== new Date().getFullYear()) {
-      q('cumul').value = 0;
+      q('report').value = 0;
+      ventes = [];
       flag('Nouvelle année : cumul remis à zéro');
-    } else if (typeof d.cumul === 'number') {
-      q('cumul').value = d.cumul;
+    } else {
+      // Migration depuis l'ancienne version : le cumul saisi devient le report
+      if (typeof d.report === 'number') q('report').value = d.report;
+      else if (typeof d.cumul === 'number') q('report').value = d.cumul;
+
+      if (Array.isArray(d.ventes)) {
+        ventes = d.ventes.filter(v =>
+          v && typeof v.ttc === 'number' && typeof v.ht === 'number'
+        );
+      }
     }
 
     // On ne restaure le TTC que s'il est réel : sinon l'app rouvrait sur des zéros
@@ -657,21 +834,26 @@ function validerVente() {
   const ttc = parseFloat(q('ttc').value) || 0;
   if (ttc <= 0) { flag('Saisis d\'abord un montant TTC'); return; }
 
-  const ht = ttc / (1 + TVA);
-  const cumul = parseFloat(q('cumul').value) || 0;
-  const nouveau = cumul + ht;
+  ventes.push({
+    id: Date.now(),
+    ttc: ttc,
+    ht: ttc / (1 + TVA),
+    date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }),
+  });
 
-  q('cumul').value = Math.round(nouveau * 100) / 100;
   q('ttc').value = '';
+  renderVentes();
   update();
   save();
-  flag('✓ Vente enregistrée · cumul : ' + fmt(nouveau));
+  flag('✓ Vente enregistrée · cumul : ' + fmt(cumulHT()));
 }
 
 // ── Reset annuel ──────────────────────────────────────────────────────────────
 function resetAnnee() {
-  if (!confirm('Remettre le CA cumulé à zéro ?')) return;
-  q('cumul').value = 0;
+  if (!confirm('Effacer le report et les ' + ventes.length + ' vente(s) enregistrée(s) ?')) return;
+  q('report').value = 0;
+  ventes = [];
+  renderVentes();
   update();
   save();
   flag('Cumul remis à zéro');
@@ -680,10 +862,11 @@ function resetAnnee() {
 // ── Init ──────────────────────────────────────────────────────────────────────
 initDots();
 load();
+renderVentes();
 update();
 
 q('ttc').addEventListener('input', () => { update(); save(); });
-q('cumul').addEventListener('input', () => { update(); save(); });
+q('report').addEventListener('input', () => { renderVentes(); update(); save(); });
 
 // ── Service Worker ────────────────────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
